@@ -26,11 +26,13 @@ import io.legado.app.ui.widget.components.divider.SettingItemDivider
 import io.legado.app.ui.widget.components.title.AdaptiveTitle
 import top.yukonga.miuix.kmp.basic.Card as MiuixCard
 
-val LocalSplicedColumnGroupState = compositionLocalOf { SplicedColumnGroupState(
-    enableItemDivider = false,
-    currentIndex = { 0 },
-    incrementIndex = { }
-) }
+val LocalSplicedColumnGroupState = compositionLocalOf {
+    SplicedColumnGroupState(
+        enableItemDivider = false,
+        currentIndex = { 0 },
+        incrementIndex = { }
+    )
+}
 
 data class SplicedColumnGroupState(
     val enableItemDivider: Boolean,
@@ -50,7 +52,7 @@ fun SplicedColumnGroup(
     val cornerRadius = when {
         themeSettings.disableSplicedColumnGroupCornerRadius -> 0.dp
         themeSettings.overrideBaseCardCornerRadius -> themeSettings.baseCardCornerRadius.dp
-        else -> 16.dp
+        else -> 8.dp
     }
     val border = if (themeSettings.overrideBaseCardBorder) {
         val configuredColor = if (LegadoTheme.isDark) {

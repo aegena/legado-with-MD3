@@ -432,14 +432,14 @@ private fun DetailList(
         state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = adaptiveContentPadding(top = topPadding, bottom = 120.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(items, key = { it.stableId }, contentType = { it::class }) { item ->
             GlassCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
-                cornerRadius = 14.dp,
+                cornerRadius = 7.dp,
                 containerColor = LegadoTheme.colorScheme.surfaceContainer,
                 onClick = {
                     if (item is BookmarkDetailItemUi.SavedBookmark) editingBookmark = item.bookmark

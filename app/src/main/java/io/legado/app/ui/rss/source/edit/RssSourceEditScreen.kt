@@ -75,7 +75,7 @@ import io.legado.app.ui.widget.components.variable.VariableEditorSheet
     }
     },
         floatingActionButton={AppFloatingActionButton({onIntent(RssSourceEditIntent.Save)},icon=Icons.Default.Save,tooltipText=stringResource(R.string.action_save))}){padding->
-        HorizontalPager(pager,Modifier.fillMaxSize()){page->val tab=tabs[page];LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(16.dp,padding.calculateTopPadding()+12.dp,16.dp,padding.calculateBottomPadding()+96.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+        HorizontalPager(pager,Modifier.fillMaxSize()){page->val tab=tabs[page];LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(16.dp,padding.calculateTopPadding()+12.dp,16.dp,padding.calculateBottomPadding()+96.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){
             if(tab==RssSourceEditTab.Base)item("options"){RssEditOptions(state,onIntent)}
             items(state.fields[tab].orEmpty(),key={it.path}){field->SourceEditFieldCard(field,Modifier.fillMaxWidth()){onIntent(RssSourceEditIntent.EditField(field.path))}}
         }} }

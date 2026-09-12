@@ -142,7 +142,7 @@ fun BookSourceEditScreen(
                     top = padding.calculateTopPadding() + 12.dp,
                     bottom = padding.calculateBottomPadding() + 96.dp,
                 ),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 if (tab == BookSourceEditTab.Base) {
                     item(key = "options", contentType = "options") {
@@ -197,7 +197,9 @@ fun SourceEditFieldCard(
     onClick: () -> Unit,
 ) {
     val title = field.labelRes?.let { stringResource(it) } ?: field.label.orEmpty()
-    GlassCard(modifier = modifier, onClick = onClick) {
+    GlassCard(
+        modifier = modifier, cornerRadius = 4.dp, onClick = onClick
+    ) {
         Column(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -327,8 +329,7 @@ fun SourceEditOptionCard(
     checked: Boolean? = null,
 ) {
     GlassCard(
-        modifier = modifier,
-        onClick = onClick
+        modifier = modifier, onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(start = 12.dp, end = 4.dp),
@@ -406,8 +407,7 @@ private fun BookSourceEditMenu(
             text = stringResource(R.string.str_share),
             onClick = { click(BookSourceEditIntent.Share) })
         RoundDropdownMenuItem(
-            text = stringResource(R.string.log),
-            onClick = { click(BookSourceEditIntent.ShowLog) })
+            text = stringResource(R.string.log), onClick = { click(BookSourceEditIntent.ShowLog) })
         RoundDropdownMenuItem(
             text = stringResource(R.string.help),
             onClick = { click(BookSourceEditIntent.ShowHelp) })

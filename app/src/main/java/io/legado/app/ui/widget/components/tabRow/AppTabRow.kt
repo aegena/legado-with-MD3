@@ -34,7 +34,8 @@ fun AppTabRow(
                 .padding(vertical = 4.dp),
             colors = TabRowDefaults.tabRowColors(
                 backgroundColor = Color.Transparent
-            )
+            ),
+            cornerRadius = 3.dp
         )
     } else {
         if (isScrollable) {

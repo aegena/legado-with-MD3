@@ -1,5 +1,8 @@
-import java.io.FileInputStream
-import java.util.Properties
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.impl.VariantOutputImpl
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.TimeZone
 
 plugins {
     alias(libs.plugins.compose.compiler)
@@ -8,74 +11,62 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.baselineprofile)
+//    alias(libs.plugins.baselineprofile)
 }
 
 apply(from = "download.gradle")
 
 
-val versionPropsFile = file("version.properties")
-val versionProps = Properties().apply {
-    if (versionPropsFile.exists()) {
-        load(FileInputStream(versionPropsFile))
-    }
+
+fun releaseTime(): String {
+    val date = Calendar.getInstance(TimeZone.getTimeZone("GMT+8")).time
+    return SimpleDateFormat("yy.MMddHH").format(date)
 }
 
-val versionMajor = versionProps["VERSION_MAJOR"]?.toString()?.toInt() ?: 0
-val versionMinor = versionProps["VERSION_MINOR"]?.toString()?.toInt() ?: 0
-val versionPatch = versionProps["VERSION_PATCH"]?.toString()?.toInt() ?: 0
-val appName = "legado"
-val projectVersionName = "$versionMajor.$versionMinor.$versionPatch"
-val enableAbiSplits = providers.gradleProperty("enableAbiSplits")
-    .map(String::toBoolean)
-    .getOrElse(true)
+fun String.execute(): String {
+    return runCatching {
+        providers.exec {
+            commandLine(this@execute.split(" "))
+            isIgnoreExitValue = true
+        }.standardOutput.asText.get().trim()
+    }.getOrDefault("0")
+}
 
-android {
-    // Compose 1.13.0-beta01 的 AAR 元数据要求 compileSdk >= 37.1（android-37.0 会被 checkAarMetadata 拒绝）。
+val appName = "legado"
+val version = "3." + releaseTime()
+
+
+configure<ApplicationExtension> {
     compileSdk = 37
     compileSdkMinor = 1
     namespace = "io.legado.app"
 
     signingConfigs {
-        if (project.hasProperty("RELEASE_STORE_FILE")) {
-            create("myConfig") {
-                storeFile = file(project.property("RELEASE_STORE_FILE") as String)
-                storePassword = project.property("RELEASE_STORE_PASSWORD") as String
-                keyAlias = project.property("RELEASE_KEY_ALIAS") as String
-                keyPassword = project.property("RELEASE_KEY_PASSWORD") as String
-                enableV1Signing = true
-                enableV2Signing = true
-                enableV3Signing = true
-                enableV4Signing = true
-            }
+        create("release") {
+            storeFile = rootProject.file("legado.jks")
+            storePassword = "legado.jks"
+            keyAlias = "legado.jks"
+            keyPassword = "legado.jks"
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
         }
+
     }
 
     defaultConfig {
         applicationId = "io.legato.kazusa"
         minSdk = 26
         targetSdk = 37
-        versionCode = System.getenv("COMMIT_NUMBER")?.toInt()?.let { 10000 + it } ?: 32640
-        versionName = System.getenv("APP_VERSION_NAME") ?: projectVersionName
+        versionCode = 10000 + "git rev-list HEAD --count".execute().toInt()
+        versionName = version
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "Cronet_Version", "\"${project.findProperty("CronetVersion")}\"")
+        buildConfigField("String", "cronetVersion", "\"${project.findProperty("CronetVersion")}\"")
         buildConfigField(
-            "String",
-            "Cronet_Main_Version",
-            "\"${project.findProperty("CronetMainVersion")}\""
+            "String", "cronetMainVersion", "\"${project.findProperty("CronetMainVersion")}\""
         )
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.incremental" to "true",
-                    "room.expandProjection" to "true",
-                    "room.schemaLocation" to "$projectDir/schemas"
-                )
-            }
-        }
     }
 
     buildFeatures {
@@ -86,9 +77,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            if (project.hasProperty("RELEASE_STORE_FILE")) {
-                signingConfig = signingConfigs.getByName("myConfig")
-            }
+            signingConfig = signingConfigs.getByName("release")
             manifestPlaceholders["app_name"] = "@string/app_name"
             isMinifyEnabled = true
             isShrinkResources = true
@@ -107,9 +96,7 @@ android {
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
-            if (project.hasProperty("RELEASE_STORE_FILE")) {
-                signingConfig = signingConfigs.getByName("myConfig")
-            }
+            signingConfig = signingConfigs.getByName("release")
             manifestPlaceholders["app_name"] = "@string/app_name"
             versionNameSuffix = "_debug"
             isMinifyEnabled = false
@@ -121,22 +108,11 @@ android {
         }
     }
 
-    splits {
-        abi {
-            isEnable = enableAbiSplits
-            reset()
-            include("armeabi-v7a", "arm64-v8a")
-            isUniversalApk = true
-        }
-    }
 
-    flavorDimensions += "mode"
-    productFlavors {
-        create("app") {
-            dimension = "mode"
-            manifestPlaceholders["APP_CHANNEL_VALUE"] = "app"
-        }
-    }
+
+
+
+    flavorDimensions.add("default")
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -188,9 +164,19 @@ ksp {
     arg("room.generateKotlin", "false")
 }
 
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        variant.outputs.forEach { output ->
+            (output as VariantOutputImpl?)?.let { outputImpl ->
+                outputImpl.outputFileName.set(appName + "_" + outputImpl.versionName.get() + ".apk")
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
+//    "baselineProfile"(project(":baselineprofile"))
     coreLibraryDesugaring(libs.desugar)
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
@@ -259,12 +245,7 @@ dependencies {
     implementation(libs.markwon.ext.tables)
     implementation(libs.markwon.html)
     implementation(libs.quick.chinese.transfer.core)
-    // 书源 JS 通过 Packages.cn.hutool.* 调用，保留在 classpath（应用代码不依赖，见 AGENTS.md）
     implementation(libs.hutool.crypto)
-    //noinspection GradleDependency
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.perf)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.palette)
     implementation(libs.androidx.biometric)

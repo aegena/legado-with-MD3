@@ -53,9 +53,9 @@ fun RoundDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = MaterialTheme.shapes.medium,
-    shadowElevation: Dp = 4.dp,
-    verticalSpacing: Dp = 8.dp,
+    shape: Shape = MaterialTheme.shapes.extraSmall,
+    shadowElevation: Dp = 2.dp,
+    verticalSpacing: Dp = 4.dp,
     content: @Composable ColumnScope.(dismiss: () -> Unit) -> Unit
 ) {
     val isMiuix = ThemeResolver.isMiuixEngine(LegadoTheme.composeEngine)
@@ -72,9 +72,9 @@ fun RoundDropdownMenu(
                 ProvideAppContentColor(popupContentColor) {
                     ListPopupColumn {
                         Column(modifier = Modifier.background(popupContainerColor)) {
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.height(2.dp))
                             content(onDismissRequest)
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.height(2.dp))
                         }
                     }
                 }
@@ -117,8 +117,8 @@ fun RoundDropdownMenuLazy(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
-    shadowElevation: Dp = 4.dp,
-    verticalSpacing: Dp = 8.dp,
+    shadowElevation: Dp = 2.dp,
+    verticalSpacing: Dp = 4.dp,
     maxHeight: Dp = Dp.Unspecified,
     menuWidth: Dp = 280.dp,
     content: LazyListScope.(dismiss: () -> Unit) -> Unit

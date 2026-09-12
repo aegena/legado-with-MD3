@@ -110,7 +110,7 @@ fun CardTabRow(
                 } else Modifier.weight(1f),
                 containerColor = containerColor,
                 contentColor = contentColor,
-                cornerRadius = 12.dp
+                cornerRadius = 6.dp
             ) {
                 Box(
                     modifier = Modifier

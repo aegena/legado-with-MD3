@@ -1,11 +1,13 @@
 package io.legado.app.ui.widget.components.alert
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -19,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.legado.app.ui.theme.LegadoTheme
 import io.legado.app.ui.theme.LegadoTheme.composeEngine
@@ -47,7 +51,12 @@ fun AppAlertDialog(
     if (ThemeResolver.isMiuixEngine(composeEngine)) {
         WindowDialog(
             show = show,
-            modifier = modifier,
+            modifier = modifier.then(
+                Modifier.background(
+                    Color.Unspecified,
+                    shape = RoundedCornerShape(8.dp)
+                )
+            ),
             title = title,
             summary = text,
             onDismissRequest = onDismissRequest,
@@ -106,6 +115,7 @@ fun AppAlertDialog(
                 textContentColor = LegadoTheme.colorScheme.onSurfaceVariant,
                 tonalElevation = AlertDialogDefaults.TonalElevation,
                 title = title?.let { { ProvideAppDensity { Text(text = it) } } },
+                shape = RoundedCornerShape(8.dp),
                 text = {
                     ProvideAppDensity {
                         Column(
@@ -115,7 +125,7 @@ fun AppAlertDialog(
                                 SelectionContainer {
                                     Text(
                                         text = text,
-                                        modifier = Modifier.padding(bottom = if (content != null) 16.dp else 0.dp)
+                                        modifier = Modifier.padding(bottom = if (content != null) 8.dp else 0.dp)
                                     )
                                 }
                             }
@@ -182,7 +192,7 @@ fun <T> AppAlertDialog(
     if (currentData != null) {
         val currentText = text ?: textProvider?.invoke(currentData)
         var lastValidText by remember { mutableStateOf(currentText) }
-        
+
         if (currentText != null) {
             lastValidText = currentText
         }

@@ -26,7 +26,7 @@ data class ThemeSettings(
     val labelContainerColorNight: Int = 0,
     val containerOpacity: Int = 100,
     val overrideBaseCardCornerRadius: Boolean = false,
-    val baseCardCornerRadius: Float = 16f,
+    val baseCardCornerRadius: Float = 8f,
     val overrideBaseCardBorder: Boolean = false,
     val baseCardBorderWidth: Float = 1f,
     val baseCardBorderColor: Int = 0,

@@ -158,8 +158,8 @@ internal fun Preferences.toDownloadCacheSettings(): DownloadCacheSettings =
         cacheBookThreadCount = compatDsInt(PreferKey.cacheBookThreadCount) ?: 16,
         userAgent = compatDsString(PreferKey.userAgent).orEmpty().ifBlank {
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                "AppleWebKit/537.36 (KHTML, like Gecko) " +
-                "Chrome/${BuildConfig.Cronet_Main_Version} Safari/537.36"
+                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                    "Chrome/${BuildConfig.cronetMainVersion} Safari/537.36"
         },
         cronetEnabled = compatDsBoolean(PreferKey.cronet) ?: false,
     )

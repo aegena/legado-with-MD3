@@ -902,7 +902,7 @@ private fun ReaderSheetVolumeItem(
 ) {
     NormalCard(
         onClick = onClick,
-        cornerRadius = 12.dp,
+        cornerRadius = 6.dp,
         containerColor = LegadoTheme.colorScheme.surfaceContainerLow,
         modifier = modifier
             .fillMaxWidth()
@@ -954,7 +954,7 @@ private fun ReaderSheetChapterItem(
     NormalCard(
         onClick = onClick,
         onLongClick = onLongClick,
-        cornerRadius = 12.dp,
+        cornerRadius = 6.dp,
         containerColor = containerColor,
         contentColor = contentColor,
         modifier = modifier

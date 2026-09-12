@@ -33,7 +33,7 @@ import java.util.Objects
 object CronetLoader : CronetEngine.Builder.LibraryLoader(), Cronet.LoaderInterface {
     //https://storage.googleapis.com/chromium-cronet/android/92.0.4515.159/Release/cronet/libs/arm64-v8a/libcronet.92.0.4515.159.so
 
-    private const val soVersion = BuildConfig.Cronet_Version
+    private const val soVersion = BuildConfig.cronetVersion
     private const val soName = "libcronet.$soVersion.so"
     private val soUrl: String
     private val soFile: File

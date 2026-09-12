@@ -1010,7 +1010,7 @@ private fun GroupFilterItem(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
-            .clip(shape = RoundedCornerShape(12.dp))
+            .clip(shape = RoundedCornerShape(6.dp))
             .background(
                 color = if (selected) LegadoTheme.colorScheme.primaryContainer
                 else LegadoTheme.colorScheme.onSheetContent

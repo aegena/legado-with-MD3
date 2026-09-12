@@ -62,7 +62,7 @@ fun RowScope.OptionCard(
         modifier = Modifier
             .weight(1f)
             .height(100.dp),
-        cornerRadius = 12.dp,
+        cornerRadius = 6.dp,
         containerColor = LegadoTheme.colorScheme.onSheetContent
     ) {
         Column(

@@ -207,11 +207,7 @@ fun HomeRouteScreen(
             },
             onAddRankingFromKinds = { sourceUrl, targetSetId, title, type, kinds ->
                 homepageViewModel.addRankingFromKinds(
-                    sourceUrl,
-                    targetSetId,
-                    title,
-                    type,
-                    kinds
+                    sourceUrl, targetSetId, title, type, kinds
                 )
             },
             onGetExploreKinds = { homepageViewModel.getSourceExploreKinds(it) },
@@ -279,18 +275,15 @@ fun HomeRouteScreen(
                 }
 
                 is HomeEffect.RequestBackupStoragePermission -> {
-                    PermissionsCompat.Builder()
-                        .addPermissions(*Permissions.Group.STORAGE)
-                        .rationale(R.string.tip_perm_request_storage)
-                        .onGranted {
+                    PermissionsCompat.Builder().addPermissions(*Permissions.Group.STORAGE)
+                        .rationale(R.string.tip_perm_request_storage).onGranted {
                             viewModel.onIntent(
                                 HomeIntent.BackupDirectorySelected(
                                     destination = effect.destination,
                                     path = effect.path,
                                 )
                             )
-                        }
-                        .request()
+                        }.request()
                 }
 
                 HomeEffect.SelectRestoreFile -> {
@@ -314,18 +307,20 @@ fun HomeRouteScreen(
     LaunchedEffect(homepageViewModel) {
         homepageViewModel.effects.collectLatest { effect ->
             when (effect) {
-                is io.legado.app.ui.main.homepage.HomepageEffect.NavigateToBookInfo ->
-                    onNavigateToBookInfo(
-                        effect.name,
-                        effect.author,
-                        effect.bookUrl,
-                        effect.origin,
-                        effect.coverPath,
-                        effect.sharedCoverKey,
-                    )
+                is io.legado.app.ui.main.homepage.HomepageEffect.NavigateToBookInfo -> onNavigateToBookInfo(
+                    effect.name,
+                    effect.author,
+                    effect.bookUrl,
+                    effect.origin,
+                    effect.coverPath,
+                    effect.sharedCoverKey,
+                )
 
-                is io.legado.app.ui.main.homepage.HomepageEffect.NavigateToExploreShow ->
-                    onOpenExploreShow(effect.title, effect.sourceUrl, effect.exploreUrl)
+                is io.legado.app.ui.main.homepage.HomepageEffect.NavigateToExploreShow -> onOpenExploreShow(
+                    effect.title,
+                    effect.sourceUrl,
+                    effect.exploreUrl
+                )
 
                 is io.legado.app.ui.main.homepage.HomepageEffect.ShowSnackbar -> {}
             }
@@ -420,9 +415,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }
-            .distinctUntilChanged()
-            .collect { page ->
+        snapshotFlow { pagerState.currentPage }.distinctUntilChanged().collect { page ->
                 val url = selectedSets.getOrNull(page)?.sourceUrl ?: return@collect
                 onIntent(HomeIntent.SelectSourceSet(url))
             }
@@ -814,10 +807,7 @@ private fun RecentBookCard(
 
             Column(
                 modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp,
-                    bottom = 14.dp
+                    start = 16.dp, end = 16.dp, top = 16.dp, bottom = 14.dp
                 ),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
@@ -907,9 +897,7 @@ private fun RecentBookCard(
                                     } ?: Spacer(modifier = Modifier.weight(1f))
                                     book.chapterProgress?.let { progress ->
                                         val percent = remember(progress) {
-                                            (progress * 100f)
-                                                .roundToInt()
-                                                .coerceIn(0, 100)
+                                            (progress * 100f).roundToInt().coerceIn(0, 100)
                                         }
                                         TextCard(
                                             text = "$percent%",
@@ -957,10 +945,8 @@ private fun RecentReadingProgress(
                 val distanceFromTop = (y / glowHeight).coerceIn(0f, 1f)
                 val alpha = 0.18f * distanceFromTop * distanceFromTop
                 val diffusion = maxDiffusion * (1f - distanceFromTop)
-                val fadeStart = (progressWidth - diffusion * 0.15f)
-                    .coerceAtLeast(0f)
-                val fadeEnd = (progressWidth + diffusion)
-                    .coerceAtMost(size.width)
+                val fadeStart = (progressWidth - diffusion * 0.15f).coerceAtLeast(0f)
+                val fadeEnd = (progressWidth + diffusion).coerceAtMost(size.width)
                 val height = stripHeight.coerceAtMost(glowHeight - y)
 
                 if (alpha > 0.001f && fadeEnd > fadeStart) {
@@ -1022,7 +1008,7 @@ private fun RecentHistoryBookCard(
         modifier = modifier
             .width(60.dp)
             .aspectRatio(5f / 7f)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(4.dp))
             .clickable(
                 role = Role.Button,
                 onClick = onClick,
@@ -1050,8 +1036,7 @@ private fun ReadingGoalCard(
     onClick: () -> Unit,
 ) {
     val todayMinutes = (todayReadTimeMillis / 60_000L).toInt()
-    val progress = (todayReadTimeMillis / 60_000f / goalMinutes)
-        .coerceIn(0f, 1f)
+    val progress = (todayReadTimeMillis / 60_000f / goalMinutes).coerceIn(0f, 1f)
 
     GlassCard(
         modifier = Modifier.fillMaxWidth(),
@@ -1310,8 +1295,7 @@ private fun HomeDialogs(
         mutableStateOf(goalDialog?.currentMinutes?.toString().orEmpty())
     }
     val goalMinutes = goalInput.toIntOrNull()
-    val isGoalValid = goalMinutes != null &&
-            goalMinutes in 1..MAX_DAILY_READING_GOAL_MINUTES
+    val isGoalValid = goalMinutes != null && goalMinutes in 1..MAX_DAILY_READING_GOAL_MINUTES
 
     AppAlertDialog(
         show = goalDialog != null,

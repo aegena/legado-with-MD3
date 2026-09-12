@@ -32,12 +32,12 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${app_name}"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:enableOnBackInvokedCallback="true"
-        android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/Base.AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
@@ -48,8 +48,8 @@
         <!-- 图标0 -->
         <activity
             android:name=".ui.main.LauncherW"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcherw">
             <intent-filter>
@@ -64,8 +64,8 @@
         </activity>
         <activity
             android:name=".ui.main.Launcher0"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher0">
             <intent-filter>
@@ -81,8 +81,8 @@
         <!-- 图标1 -->
         <activity
             android:name=".ui.main.Launcher1"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher1">
             <intent-filter>
@@ -98,8 +98,8 @@
         <!-- 图标2 -->
         <activity
             android:name=".ui.main.Launcher2"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher2">
             <intent-filter>
@@ -115,8 +115,8 @@
         <!-- 图标3 -->
         <activity
             android:name=".ui.main.Launcher3"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher3">
             <intent-filter>
@@ -132,8 +132,8 @@
         <!-- 图标4 -->
         <activity
             android:name=".ui.main.Launcher4"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher4">
             <intent-filter>
@@ -149,8 +149,8 @@
         <!-- 图标5 -->
         <activity
             android:name=".ui.main.Launcher5"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher5">
             <intent-filter>
@@ -166,8 +166,8 @@
         <!-- 图标6 -->
         <activity
             android:name=".ui.main.Launcher6"
-            android:enabled="false"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher6">
             <intent-filter>
@@ -186,8 +186,8 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="locale|layoutDirection|uiMode|screenLayout"
             android:enableOnBackInvokedCallback="true"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -224,14 +224,14 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.dict.DictActivity"
-            android:enableOnBackInvokedCallback="true"
             android:configChanges="locale|layoutDirection|uiMode|orientation|screenSize|screenLayout"
+            android:enableOnBackInvokedCallback="true"
             android:hardwareAccelerated="true" />
         <!-- 文件管理 -->
         <activity
             android:name=".ui.file.FileManageActivity"
-            android:enableOnBackInvokedCallback="true"
             android:configChanges="locale|layoutDirection|uiMode|orientation|screenSize|screenLayout"
+            android:enableOnBackInvokedCallback="true"
             android:hardwareAccelerated="true" />
         <!-- 文字处理 -->
         <activity
@@ -390,8 +390,7 @@
             android:foregroundServiceType="dataSync"
             android:icon="@drawable/ic_web_service_noti"
             android:label="legado Web Service"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            >
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -452,15 +451,7 @@
                 tools:node="remove" />
         </provider>
 
-        <provider
-            android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="${applicationId}.firebaseinitprovider"
-            android:exported="false"
-            tools:node="remove" />
 
-        <meta-data
-            android:name="channel"
-            android:value="${APP_CHANNEL_VALUE}" />
     </application>
 
     <queries>

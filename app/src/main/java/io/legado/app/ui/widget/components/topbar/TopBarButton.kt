@@ -87,6 +87,7 @@ private val TopBarButtonStyle.seriesStyle: SeriesIconButtonStyle
         TopBarButtonStyle.Plain -> SeriesIconButtonStyle.Plain
         TopBarButtonStyle.Tonal, TopBarButtonStyle.SemiTransparent,
         TopBarButtonStyle.LiquidGlass -> SeriesIconButtonStyle.Tonal
+
         TopBarButtonStyle.Outlined -> SeriesIconButtonStyle.Outlined
     }
 
@@ -179,6 +180,7 @@ internal fun TopBarActionsRow(
         TopBarButtonStyle.Tonal -> LegadoTheme.colorScheme.surfaceContainerLow
         TopBarButtonStyle.SemiTransparent, TopBarButtonStyle.LiquidGlass ->
             GlassTopAppBarDefaults.controlContainerColor()
+
         else -> Color.Transparent // Outlined
     }
     Box(
@@ -269,7 +271,7 @@ private fun TopBarButton(
             onLongClick = onLongClick,
             onLongClickLabel = onLongClickLabel,
             modifier = if (liquidGlassEnabled) {
-                modifier.topBarLiquidGlass(RoundedCornerShape(50))
+                modifier.topBarLiquidGlass(RoundedCornerShape(25))
             } else {
                 modifier
             },
@@ -345,6 +347,7 @@ fun TopBarActionButton(
         MiuixIconButton(
             onClick = onClick,
             modifier = modifier,
+            cornerRadius = 20.dp
         ) {
             MiuixIcon(
                 imageVector = imageVector,

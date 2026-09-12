@@ -75,12 +75,12 @@ fun RoundDropdownMenuItem(
                     enabled = enabled,
                     onClick = onClick
                 )
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(horizontal = 20.dp, vertical = 12.dp),
         ) {
             CompositionLocalProvider(LocalContentColor provides textColor) {
                 if (leadingIcon != null) {
                     leadingIcon()
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(2.dp))
                 }
 
                 Box(
@@ -97,10 +97,10 @@ fun RoundDropdownMenuItem(
                 }
 
                 if (trailingIcon != null) {
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(2.dp))
                     trailingIcon()
                 } else {
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(2.dp))
                     AppIcon(
                         imageVector = MiuixIcons.Basic.Check,
                         contentDescription = null,
@@ -135,7 +135,7 @@ fun RoundDropdownMenuItem(
                 .padding(horizontal = 8.dp)
                 .fillMaxWidth(),
             enabled = enabled,
-            shape = MaterialTheme.shapes.small,
+            shape = MaterialTheme.shapes.extraSmall,
             color = containerColor,
             contentColor = contentColor,
             interactionSource = interaction
@@ -149,7 +149,7 @@ fun RoundDropdownMenuItem(
             ) {
                 if (leadingIcon != null) {
                     leadingIcon()
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(2.dp))
                 }
 
                 Box(
@@ -165,10 +165,10 @@ fun RoundDropdownMenuItem(
                 }
 
                 if (trailingIcon != null) {
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(2.dp))
                     trailingIcon()
                 } else {
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(2.dp))
                     AppIcon(
                         imageVector = Icons.Default.Check,
                         contentDescription = null,

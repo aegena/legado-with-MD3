@@ -67,7 +67,6 @@ import io.legado.app.help.storage.Backup
 import io.legado.app.lib.theme.primaryColor
 import io.legado.app.model.BookCover
 import io.legado.app.utils.ChineseUtils
-import io.legado.app.utils.FirebaseManager
 import io.legado.app.utils.LogUtils
 import io.legado.app.utils.getPrefBoolean
 import io.legado.app.utils.getPrefString
@@ -170,11 +169,7 @@ class App : Application(), SingletonImageLoader.Factory {
             }
         }
         super.onCreate()
-        FirebaseManager.init(this)
         CrashHandler(this)
-        if (isDebuggable) {
-            ThreadUtils.setThreadAssertsDisabledForTesting(true)
-        }
         registerActivityLifecycleCallbacks(LifecycleHelp)
         // Rhino 的全局 ContextFactory 必须在任何线程执行 Context.enter() 之前安装：
         // 它只在 RhinoScriptEngine 的 object init 里通过 ContextFactory.initGlobal 生效，

@@ -11,6 +11,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,6 +33,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.Check
@@ -125,8 +128,10 @@ import top.yukonga.miuix.kmp.basic.NavigationRailItem as MiuixNavigationRailItem
 private val MainNavigationTabMinWidth = 76.dp
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
-    ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalSharedTransitionApi::class
 )
 @Composable
 fun MainScreen(
@@ -158,11 +163,7 @@ fun MainScreen(
     onNavigateToRssSourceEdit: (String?) -> Unit,
     onNavigateToRssSort: (sourceUrl: String, sortUrl: String?, key: String?) -> Unit,
     onNavigateToRssRead: (
-        title: String?,
-        origin: String,
-        link: String?,
-        openUrl: String?,
-        startPage: Boolean
+        title: String?, origin: String, link: String?, openUrl: String?, startPage: Boolean
     ) -> Unit,
     onNavigateToRssFavorites: () -> Unit,
     onNavigateToRuleSub: () -> Unit,
@@ -208,16 +209,16 @@ fun MainScreen(
 
     val hazeState = remember { HazeState() }
     val customSecondaryColor = if (LegadoTheme.isDark) {
-        mainUiState.secondaryThemeColorNight.takeIf { it != 0 }
-            ?: mainUiState.secondaryThemeColor
+        mainUiState.secondaryThemeColorNight.takeIf { it != 0 } ?: mainUiState.secondaryThemeColor
     } else {
         mainUiState.secondaryThemeColor
     }
-    val floatingBarSurfaceColor = if (mainUiState.deepPersonalizationActive && customSecondaryColor != 0) {
-        Color(customSecondaryColor)
-    } else {
-        LegadoTheme.colorScheme.surface
-    }
+    val floatingBarSurfaceColor =
+        if (mainUiState.deepPersonalizationActive && customSecondaryColor != 0) {
+            Color(customSecondaryColor)
+        } else {
+            LegadoTheme.colorScheme.surface
+        }
     val floatingBarBackdrop = rememberLayerBackdrop {
         drawRect(floatingBarSurfaceColor)
         drawContent()
@@ -249,11 +250,7 @@ fun MainScreen(
     }
 
     fun handleMainDestinationClick(index: Int, destination: MainDestination) {
-        if (
-            destination == MainDestination.Bookshelf &&
-            pagerState.currentPage == index &&
-            pagerState.targetPage == index
-        ) {
+        if (destination == MainDestination.Bookshelf && pagerState.currentPage == index && pagerState.targetPage == index) {
             requestBookshelfScrollToTop()
             return
         }
@@ -280,10 +277,8 @@ fun MainScreen(
     val showLabel = !isUnlabeled
 
     val navState = rememberWideNavigationRailState(
-        initialValue = if (mainUiState.navExtended)
-            WideNavigationRailValue.Expanded
-        else
-            WideNavigationRailValue.Collapsed
+        initialValue = if (mainUiState.navExtended) WideNavigationRailValue.Expanded
+        else WideNavigationRailValue.Collapsed
     )
 
     Row(
@@ -316,13 +311,10 @@ fun MainScreen(
                             onClick = { onNavigateToSearch(null) },
                         ) {
                             AppIcon(
-                                Icons.Default.Search,
-                                contentDescription = null,
-                                tint = Color.White
+                                Icons.Default.Search, contentDescription = null, tint = Color.White
                             )
                         }
-                    }
-                ) {
+                    }) {
                     destinations.forEachIndexed { index, destination ->
                         val selected = pagerState.targetPage == index
                         var showGroupMenu by remember { mutableStateOf(false) }
@@ -341,15 +333,13 @@ fun MainScreen(
                                                 indication = null,
                                                 onClick = {
                                                     handleMainDestinationClick(
-                                                        index,
-                                                        destination
+                                                        index, destination
                                                     )
                                                 },
                                                 onLongClick = {
                                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                                     showGroupMenu = true
-                                                }
-                                            )
+                                                })
                                         } else Modifier
                                     ),
                                 selected = selected,
@@ -365,8 +355,7 @@ fun MainScreen(
                                         if (pagerState.currentPage != index) {
                                             pagerState.scrollToPage(index)
                                         }
-                                    }
-                                )
+                                    })
                             }
                         }
                     }
@@ -407,11 +396,9 @@ fun MainScreen(
                             onClick = { onNavigateToSearch(null) },
                             expanded = expanded,
                             icon = { AppIcon(Icons.Default.Search, contentDescription = null) },
-                            text = { AppText(stringResource(R.string.search)) }
-                        )
+                            text = { AppText(stringResource(R.string.search)) })
                     }
-                }
-            ) {
+                }) {
                 destinations.forEachIndexed { index, destination ->
                     val selected = pagerState.targetPage == index
                     var showGroupMenu by remember { mutableStateOf(false) }
@@ -443,8 +430,7 @@ fun MainScreen(
                                             onLongClick = {
                                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                                 showGroupMenu = true
-                                            }
-                                        )
+                                            })
                                     } else Modifier
                                 )
 
@@ -456,26 +442,22 @@ fun MainScreen(
                                             if (pagerState.currentPage != index) {
                                                 pagerState.scrollToPage(index)
                                             }
-                                        }
-                                    )
+                                        })
                                 }
                             }
                         },
                         label = if (labelVisibilityMode != "unlabeled") {
                             { AppText(stringResource(destination.labelId)) }
-                        } else null
-                    )
+                        } else null)
                 }
             }
         }
 
         AppScaffold(
-            modifier = Modifier.weight(1f),
-            bottomBar = {
+            modifier = Modifier.weight(1f), bottomBar = {
                 if (!useRail && mainUiState.showBottomView && !useFloatingBottomBar) {
                     AppNavigationBar(
-                        showLabel = showLabel,
-                        alwaysShowLabel = alwaysShowLabel
+                        showLabel = showLabel, alwaysShowLabel = alwaysShowLabel
                     ) {
                         destinations.forEachIndexed { index, destination ->
                             val selected = pagerState.targetPage == index
@@ -508,8 +490,7 @@ fun MainScreen(
                                 ),
                                 m3ShowLabel = showLabel,
                                 m3AlwaysShowLabel = alwaysShowLabel,
-                                useCustomIcon =
-                                    customIconPath.isNotEmpty() || selectedCustomIconPath.isNotEmpty(),
+                                useCustomIcon = customIconPath.isNotEmpty() || selectedCustomIconPath.isNotEmpty(),
                             )
                         }
                     }
@@ -543,8 +524,7 @@ fun MainScreen(
                             .then(
                                 with(sharedTransitionScope) {
                                     if (this != null) Modifier.skipToLookaheadSize() else Modifier
-                                }
-                            ),
+                                }),
                         userScrollEnabled = true,
                         beyondViewportPageCount = 4
                     ) { page ->
@@ -554,59 +534,59 @@ fun MainScreen(
                         )
                         CompositionLocalProvider(LocalLifecycleOwner provides pageLifecycleOwner) {
                             when (destination) {
-                            MainDestination.Home -> HomeRouteScreen(
-                                onOpenBook = { book ->
-                                    context.startActivityForBook(book)
-                                },
-                                onNavigateToBookInfo = { name, author, bookUrl, origin, coverPath, sharedCoverKey ->
-                                    onNavigateToBookInfo(
-                                        name ?: "",
-                                        author ?: "",
-                                        bookUrl,
-                                        origin,
-                                        coverPath,
-                                        sharedCoverKey,
-                                    )
-                                },
-                                onOpenExploreShow = onNavigateToExploreShow,
-                                onOpenBackupSettings = onNavigateToBackupSettings,
-                                onNavigateToReadRecord = onNavigateToReadRecord,
-                                onNavigateToReadRecordOverview = onNavigateToReadRecordOverview,
-                                sharedTransitionScope = sharedTransitionScope,
-                                animatedVisibilityScope = animatedVisibilityScope,
-                            )
+                                MainDestination.Home -> HomeRouteScreen(
+                                    onOpenBook = { book ->
+                                        context.startActivityForBook(book)
+                                    },
+                                    onNavigateToBookInfo = { name, author, bookUrl, origin, coverPath, sharedCoverKey ->
+                                        onNavigateToBookInfo(
+                                            name ?: "",
+                                            author ?: "",
+                                            bookUrl,
+                                            origin,
+                                            coverPath,
+                                            sharedCoverKey,
+                                        )
+                                    },
+                                    onOpenExploreShow = onNavigateToExploreShow,
+                                    onOpenBackupSettings = onNavigateToBackupSettings,
+                                    onNavigateToReadRecord = onNavigateToReadRecord,
+                                    onNavigateToReadRecordOverview = onNavigateToReadRecordOverview,
+                                    sharedTransitionScope = sharedTransitionScope,
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                )
 
-                            MainDestination.Bookshelf -> BookshelfRouteScreen(
-                                scrollToTopRequest = bookshelfScrollToTopRequest,
-                                onScrollToTopRequestHandled = { handledRequest ->
-                                    if (bookshelfScrollToTopRequest == handledRequest) {
-                                        bookshelfScrollToTopRequest = 0L
-                                    }
-                                },
-                                onBookClick = { book, sharedCoverKey ->
-                                    onOpenBookshelfBook(book, sharedCoverKey)
-                                },
-                                onBookLongClick = { book, sharedCoverKey ->
-                                    onNavigateToBookInfo(
-                                        book.name,
-                                        book.author,
-                                        book.bookUrl,
-                                        book.origin,
-                                        book.getDisplayCover(),
-                                        sharedCoverKey
-                                    )
-                                },
-                                onNavigateToSearch = { query -> onNavigateToSearch(query) },
-                                onNavigateToRemoteImport = onNavigateToRemoteImport,
-                                onNavigateToLocalImport = onNavigateToLocalImport,
-                                onNavigateToCache = onNavigateToCache,
-                                onNavigateToSettings = onOpenSettings,
-                                sharedTransitionScope = sharedTransitionScope,
-                                animatedVisibilityScope = animatedVisibilityScope,
-                            )
+                                MainDestination.Bookshelf -> BookshelfRouteScreen(
+                                    scrollToTopRequest = bookshelfScrollToTopRequest,
+                                    onScrollToTopRequestHandled = { handledRequest ->
+                                        if (bookshelfScrollToTopRequest == handledRequest) {
+                                            bookshelfScrollToTopRequest = 0L
+                                        }
+                                    },
+                                    onBookClick = { book, sharedCoverKey ->
+                                        onOpenBookshelfBook(book, sharedCoverKey)
+                                    },
+                                    onBookLongClick = { book, sharedCoverKey ->
+                                        onNavigateToBookInfo(
+                                            book.name,
+                                            book.author,
+                                            book.bookUrl,
+                                            book.origin,
+                                            book.getDisplayCover(),
+                                            sharedCoverKey
+                                        )
+                                    },
+                                    onNavigateToSearch = { query -> onNavigateToSearch(query) },
+                                    onNavigateToRemoteImport = onNavigateToRemoteImport,
+                                    onNavigateToLocalImport = onNavigateToLocalImport,
+                                    onNavigateToCache = onNavigateToCache,
+                                    onNavigateToSettings = onOpenSettings,
+                                    sharedTransitionScope = sharedTransitionScope,
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                )
 
                                 MainDestination.Explore -> ExploreMainRoute(
-                                onOpenExploreShow = onNavigateToExploreShow,
+                                    onOpenExploreShow = onNavigateToExploreShow,
                                     onBookClick = { book, sharedCoverKey ->
                                         onNavigateToBookInfo(
                                             book.name,
@@ -617,50 +597,56 @@ fun MainScreen(
                                             sharedCoverKey,
                                         )
                                     },
-                                onOpenLogin = { sourceUrl ->
-                                    onNavigateToSourceLogin(
-                                        io.legado.app.ui.login.SourceLoginType.BookSource,
-                                        sourceUrl,
-                                    )
-                                },
-                                onOpenEdit = onNavigateToBookSourceEdit,
-                                onOpenSearch = onNavigateToScopedSearch,
-                            )
-                            MainDestination.Rss -> RssRouteScreen(
-                                onOpenSort = { sourceUrl, sortUrl, key ->
-                                    onNavigateToRssSort(sourceUrl, sortUrl, key)
-                                },
-                                onOpenRead = { title, origin, link, openUrl, startPage ->
-                                    onNavigateToRssRead(title, origin, link, openUrl, startPage)
-                                },
-                                onOpenFavorites = onNavigateToRssFavorites,
-                                onOpenRuleSub = onNavigateToRuleSub,
-                                onOpenLogin = { sourceUrl ->
-                                    onNavigateToSourceLogin(
-                                        io.legado.app.ui.login.SourceLoginType.RssSource,
-                                        sourceUrl,
-                                    )
-                                },
-                                onOpenSourceEdit = onNavigateToRssSourceEdit,
-                                onOpenSourceManage = onNavigateToRssSourceManage,
-                            )
-                            MainDestination.My -> MyRouteScreen(
-                                onOpenSettings = onOpenSettings,
-                                onNavigateToChat = onNavigateToChat,
-                                onNavigate = { event ->
-                                    when (event) {
-                                        PrefClickEvent.OpenBookCacheManage -> onNavigateToBookCacheManage()
-                                        PrefClickEvent.OpenBookSourceManage -> onNavigateToBookSourceManage()
-                                        PrefClickEvent.OpenReplaceRules -> onNavigateToReplaceRules()
-                                        PrefClickEvent.OpenReadRecord -> onNavigateToReadRecord()
-                                        PrefClickEvent.OpenDictRule -> onNavigateToDictRule()
-                                        PrefClickEvent.OpenTxtTocRule -> onNavigateToTxtTocRule()
-                                        PrefClickEvent.OpenAllBookmark -> onNavigateToAllBookmark()
-                                        else -> onIntent(MainUiIntent.HandlePreferenceClick(event))
+                                    onOpenLogin = { sourceUrl ->
+                                        onNavigateToSourceLogin(
+                                            io.legado.app.ui.login.SourceLoginType.BookSource,
+                                            sourceUrl,
+                                        )
+                                    },
+                                    onOpenEdit = onNavigateToBookSourceEdit,
+                                    onOpenSearch = onNavigateToScopedSearch,
+                                )
+
+                                MainDestination.Rss -> RssRouteScreen(
+                                    onOpenSort = { sourceUrl, sortUrl, key ->
+                                        onNavigateToRssSort(sourceUrl, sortUrl, key)
+                                    },
+                                    onOpenRead = { title, origin, link, openUrl, startPage ->
+                                        onNavigateToRssRead(title, origin, link, openUrl, startPage)
+                                    },
+                                    onOpenFavorites = onNavigateToRssFavorites,
+                                    onOpenRuleSub = onNavigateToRuleSub,
+                                    onOpenLogin = { sourceUrl ->
+                                        onNavigateToSourceLogin(
+                                            io.legado.app.ui.login.SourceLoginType.RssSource,
+                                            sourceUrl,
+                                        )
+                                    },
+                                    onOpenSourceEdit = onNavigateToRssSourceEdit,
+                                    onOpenSourceManage = onNavigateToRssSourceManage,
+                                )
+
+                                MainDestination.My -> MyRouteScreen(
+                                    onOpenSettings = onOpenSettings,
+                                    onNavigateToChat = onNavigateToChat,
+                                    onNavigate = { event ->
+                                        when (event) {
+                                            PrefClickEvent.OpenBookCacheManage -> onNavigateToBookCacheManage()
+                                            PrefClickEvent.OpenBookSourceManage -> onNavigateToBookSourceManage()
+                                            PrefClickEvent.OpenReplaceRules -> onNavigateToReplaceRules()
+                                            PrefClickEvent.OpenReadRecord -> onNavigateToReadRecord()
+                                            PrefClickEvent.OpenDictRule -> onNavigateToDictRule()
+                                            PrefClickEvent.OpenTxtTocRule -> onNavigateToTxtTocRule()
+                                            PrefClickEvent.OpenAllBookmark -> onNavigateToAllBookmark()
+                                            else -> onIntent(
+                                                MainUiIntent.HandlePreferenceClick(
+                                                    event
+                                                )
+                                            )
+                                        }
                                     }
-                                }
-                            )
-                        }
+                                )
+                            }
                         }
                     }
                 }
@@ -725,10 +711,10 @@ fun MainScreen(
                             tabsCount = destinations.size,
                             isBlurEnabled = useLiquidGlass,
                             hasCustomIcons = destinations.any { dest ->
-                                mainUiState.customIconPath(dest).isNotEmpty() ||
-                                        mainUiState.selectedCustomIconPath(dest).isNotEmpty()
-                            }
-                        ) {
+                                mainUiState.customIconPath(dest)
+                                    .isNotEmpty() || mainUiState.selectedCustomIconPath(dest)
+                                    .isNotEmpty()
+                            }) {
                             destinations.forEachIndexed { index, destination ->
                                 val selected = pagerState.targetPage == index
                                 val customIconPath = mainUiState.customIconPath(destination)
@@ -746,8 +732,7 @@ fun MainScreen(
                                         )
                                         .semantics(mergeDescendants = true) {
                                             contentDescription = destinationLabel
-                                        }
-                                ) {
+                                        }) {
                                     NavigationIcon(
                                         destination = destination,
                                         customIconPath = if (selected) {
@@ -869,8 +854,7 @@ private fun BookshelfRailGroupMenu(
     val coroutineScope = rememberCoroutineScope()
 
     RoundDropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest
+        expanded = expanded, onDismissRequest = onDismissRequest
     ) { dismiss ->
         state.groups.forEachIndexed { groupIndex, group ->
             RoundDropdownMenuItem(
@@ -889,8 +873,7 @@ private fun BookshelfRailGroupMenu(
                             modifier = Modifier.size(18.dp)
                         )
                     }
-                }
-            )
+                })
         }
     }
 }
@@ -904,9 +887,7 @@ private fun NavigationIcon(
 ) {
     if (customIconPath.isNotEmpty()) {
         AsyncImage(
-            model = customIconPath,
-            contentDescription = null,
-            modifier = modifier.size(40.dp)
+            model = customIconPath, contentDescription = null, modifier = modifier.size(40.dp)
         )
     } else {
         val icon = AppIcons.mainDestination(destination, selected)
